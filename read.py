@@ -4,6 +4,7 @@ import csv
 import sys
 
 
+# Read a given csv file and store in input variables
 def read_file(names, classValueName, data, classValues):
     class_value_file_exist = False
     feature_names = False
@@ -31,8 +32,6 @@ def read_file(names, classValueName, data, classValues):
         if not class_value_file_exist:
             feature_count -= 1
         csvfile.seek(0)
-        print("\nFeature count: ")
-        print(feature_count)
 
         # Name features, if provided
         if feature_names:
@@ -42,8 +41,6 @@ def read_file(names, classValueName, data, classValues):
         else:
             for x in range(feature_count):
                 names.append(x)
-        print("Names: ")
-        print(names)
 
         # Populate data list
         for row in read_csv:
@@ -59,7 +56,7 @@ def read_file(names, classValueName, data, classValues):
             for row in read_csv:
                 classValues.append(row[feature_count])
 
-    # Open class label file if applicable
+    # Open class value file if applicable
     if class_value_file_exist:
         with open(class_value_file) as csvfile:
             read_csv = csv.reader(csvfile, delimiter=',')
@@ -70,10 +67,7 @@ def read_file(names, classValueName, data, classValues):
             for row in read_csv:
                 classValues.append(row[0])
 
-    print("Class label name: ")
-    print(classValueName)
-
-    # Append class labels to data set
+    # Append class values to data set
     entry = -1
     for x in data:
         entry += 1
