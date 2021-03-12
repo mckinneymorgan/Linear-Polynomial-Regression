@@ -1,6 +1,7 @@
 # Original author: Morgan McKinney 3/2021
 
 import csv
+import sys
 
 
 def read_file(names, classValueName, data, classValues):
@@ -13,9 +14,13 @@ def read_file(names, classValueName, data, classValues):
     if class_value_file.lower() == 'y':
         class_value_file = input("Enter class label file name: ")
         class_value_file_exist = True
+    elif class_value_file.lower() != 'n':
+        sys.exit("Invalid input")
     feature_names_exist = input("Are the features named (Y/N): ")
     if feature_names_exist.lower() == 'y':
         feature_names = True
+    elif feature_names_exist.lower() != 'n':
+        sys.exit("Invalid input")
 
     # Read file
     with open(file) as csvfile:
@@ -78,5 +83,5 @@ def read_file(names, classValueName, data, classValues):
         elif class_label == 'False':
             class_label = 0
         else:
-            class_label = int(float(class_label))
+            class_label = float(class_label)
         data[entry].append(class_label)
