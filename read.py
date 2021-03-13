@@ -5,9 +5,10 @@ import sys
 
 
 # Read a given csv file and store in input variables
-def read_file(names, classValueName, data, classValues):
+def read_file(names, class_value_name, data, class_values):
     class_value_file_exist = False
     feature_names = False
+    class_value_name = "class value"
 
     # User input, get filename(s)
     file = input("Enter csv file name: ")
@@ -28,9 +29,9 @@ def read_file(names, classValueName, data, classValues):
         read_csv = csv.reader(csvfile, delimiter=',')
 
         # Count features, return to start of file
-        feature_count = len(next(read_csv))
+        feature_num = len(next(read_csv))
         if not class_value_file_exist:
-            feature_count -= 1
+            feature_num -= 1
         csvfile.seek(0)
 
         # Name features, if provided
@@ -39,13 +40,13 @@ def read_file(names, classValueName, data, classValues):
             if not class_value_file_exist:
                 names.pop()
         else:
-            for x in range(feature_count):
+            for x in range(feature_num):
                 names.append(x)
 
         # Populate data list
         for row in read_csv:
             row_list = []
-            for x in range(feature_count):
+            for x in range(feature_num):
                 row_entry = float(row[x])
                 row_list.append(row_entry)
             data.append(row_list)
@@ -54,7 +55,7 @@ def read_file(names, classValueName, data, classValues):
         if not class_value_file_exist:
             csvfile.seek(0)
             for row in read_csv:
-                classValues.append(row[feature_count])
+                class_values.append(row[feature_num])
 
     # Open class value file if applicable
     if class_value_file_exist:
@@ -63,15 +64,15 @@ def read_file(names, classValueName, data, classValues):
 
             # Populate class list
             if feature_names_exist:
-                classValueName = next(read_csv)
+                class_value_name = next(read_csv)
             for row in read_csv:
-                classValues.append(row[0])
+                class_values.append(row[0])
 
     # Append class values to data set
     entry = -1
     for x in data:
         entry += 1
-        class_label = classValues[entry]
+        class_label = class_values[entry]
         if class_label == 'True':
             class_label = 1
         elif class_label == 'False':
