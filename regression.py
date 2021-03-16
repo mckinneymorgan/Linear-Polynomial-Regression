@@ -3,7 +3,11 @@
 import math
 import numpy
 
+
 def preprocess():
+    x_i = (x_i - min(x)) / (max(x) - min(x))
+    return x_i
+
 
 def get_h_theta(m, x):
     # Reference: https://www.geeksforgeeks.org/transpose-matrix-single-line-python/
@@ -11,6 +15,22 @@ def get_h_theta(m, x):
     h_theta = transposed_theta * x
     return h_theta
 
-def weight_update():
+
+def get_raw_error():
+    return 0
+
+
+def get_gradient():
+    return 0
+
+
+def weight_update(d, alpha):
     # Calculate h_theta(x) = theta^T * x
-    # Calculate raw error
+    h_theta = get_h_theta()
+    # Calculate raw error e = h_theta(x) - y
+    raw_error = get_raw_error()
+    # Calculate gradient = e * x
+    gradient = get_gradient()
+    # Perform update using scalar operations
+    theta = theta_old - alpha * gradient
+    return 0
