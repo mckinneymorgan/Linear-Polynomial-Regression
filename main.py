@@ -10,6 +10,7 @@ names = []
 classValueName = ""
 data = []
 classValues = []
+alpha = 0.001
 
 # User input, read and store input csv file
 print("LINEAR AND POLYNOMIAL REGRESSION \n")
@@ -31,7 +32,7 @@ y = []
 plt.title("Linear Regression")
 plt.xlabel("X-axis")
 plt.ylabel("Y-axis")
-plt.plot(x, y, color ="green")
+plt.plot(x, y, color="green")
 plt.show()
 
 
