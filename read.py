@@ -5,10 +5,11 @@ import sys
 
 
 # Read a given csv file and store in input variables
-def read_file(names, class_value_name, data, class_values):
+def read_file(names, data):
     class_value_file_exist = False
     feature_names = False
-    class_value_name = "class value"
+    class_value_name = "class"
+    class_values = []
 
     # User input, get filename(s)
     file = input("Enter csv file name: ")
@@ -80,3 +81,6 @@ def read_file(names, class_value_name, data, class_values):
         else:
             class_label = float(class_label)
         data[entry].append(class_label)
+
+    # Append class value name to name list
+    names.append(class_value_name)

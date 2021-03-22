@@ -4,8 +4,9 @@ import math
 import numpy
 
 
-def preprocess():
-    x_i = (x_i - min(x)) / (max(x) - min(x))
+def preprocess(data):
+    for x in data:
+        x_i = (x_i - min(x)) / (max(x) - min(x))
     return x_i
 
 

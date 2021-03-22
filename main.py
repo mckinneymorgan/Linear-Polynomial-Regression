@@ -2,6 +2,8 @@
 
 import read
 import regression
+import sys
+from random import randint
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -11,11 +13,24 @@ classValueName = ""
 data = []
 classValues = []
 alpha = 0.001
+epochMax = 100  # Full batch
+theta_0 = randint(0, 1)
+theta_1 = randint(0, 1)
+linear = True
+order = 11  # Number of features in synthetic dataset
 
 # User input, read and store input csv file
 print("LINEAR AND POLYNOMIAL REGRESSION \n")
-read.read_file(names, classValueName, data, classValues)
+read.read_file(names, data)
 data = np.array(data)  # Store data column-wise
+regressionType = input("Linear or polynomial regression?")
+if regressionType.lower() == 'polynomial':
+    linear = False
+    orderStr = input("What is the order?")
+    order = int(orderStr)
+elif regressionType.lower() != 'linear':
+    sys.exit("Invalid input")
+
 featureCount = len(data[0])-1
 newFeatureValues = [[y for y in x] for x in data]
 
