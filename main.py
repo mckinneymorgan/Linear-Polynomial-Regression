@@ -16,6 +16,7 @@ alpha = 0.001
 epochMax = 100  # Full batch
 theta_0 = randint(0, 1)
 theta_1 = randint(0, 1)
+theta = [theta_0, theta_1]
 linear = True
 order = 11  # Number of features in synthetic dataset, default
 
