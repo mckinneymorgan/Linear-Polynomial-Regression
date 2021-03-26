@@ -35,3 +35,10 @@ def weight_update(d, alpha):
     # Perform update using scalar operations
     theta = theta_old - alpha * gradient
     return 0
+
+
+def hypothesis(x, w):
+    w_transposed = [[w[j][i] for j in range(len(w))] for i in range(len(w[0]))]
+    h = x * w
+    return h
+
