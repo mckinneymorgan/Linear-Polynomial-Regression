@@ -31,14 +31,17 @@ elif regressionType.lower() != 'linear':
 dataNew = data.copy()
 if not linear:
     example = 0
+    newIndex = 0
+    for x in range(order):  # Expand array to allow for more indexes
+        newIndex += 1
+        dataNew = np.insert(dataNew, newIndex, 0, axis=1)
     for m in data:
         index = 0
-        for x in range(order):
+        original = dataNew[example][index]
+        for x in range(order):  # Assign casted values in new index
             index += 1
-            cast = dataNew[example][index-1]
-            print(cast)
-            cast = float(cast) ** (index + 1)
-            dataNew[example] = np.insert(dataNew[example], index, cast)
+            cast = float(original) ** (index + 1)
+            dataNew[example][index] = cast
         example += 1
 
 # Output given information
@@ -68,6 +71,7 @@ while epoch <= epochMax:
         groundTruth = dataNew[example][featureCount]
         rawError = hypothesis - groundTruth  # Scalar
         gradient = rawError * inputs  # 1 x n
+        # Output variables
         # print("Inputs: " + str(inputs))
         # print("Weights: " + str(weights))
         # print("Hypothesis: " + str(hypothesis))
