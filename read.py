@@ -39,6 +39,7 @@ def read_file(names, data):
         if feature_names:
             names = next(read_csv)
             if not class_value_file_exist:
+                class_value_name = names[feature_num]
                 names.pop()
         else:
             for x in range(feature_num):
@@ -55,9 +56,10 @@ def read_file(names, data):
         # Populate class list
         if not class_value_file_exist:
             csvfile.seek(0)
+            if feature_names:
+                next(read_csv)
             for row in read_csv:
                 class_values.append(row[feature_num])
-
     # Open class value file if applicable
     if class_value_file_exist:
         with open(class_value_file) as csvfile:
@@ -79,7 +81,8 @@ def read_file(names, data):
         elif class_label == 'False':
             class_label = 0
         else:
-            class_label = float(class_label)
+            if entry != 0 and not feature_names:
+                class_label = float(class_label)
         data[entry].append(class_label)
 
     # Append class value name to name list

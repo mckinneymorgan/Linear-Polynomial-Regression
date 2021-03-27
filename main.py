@@ -39,6 +39,7 @@ weights = np.array(weights)
 featureCount = len(data[0])-1
 print("Features: " + str(featureCount))
 print("Order: " + str(order))
+print(data)
 
 # Regression
 epoch = 1
