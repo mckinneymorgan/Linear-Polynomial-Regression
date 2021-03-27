@@ -3,20 +3,17 @@
 import read
 import regression
 import sys
-from random import randint
+from random import random
 import numpy as np
 import matplotlib.pyplot as plt
 
 # Initialize variables
 names = []
-classValueName = ""
 data = []
-classValues = []
 alpha = 0.001
 epochMax = 100
 linear = True
 order = 11  # Number of features in synthetic dataset, default
-predictions = []
 
 # User input, read and store input csv file
 print("LINEAR AND POLYNOMIAL REGRESSION \n")
@@ -30,48 +27,69 @@ if regressionType.lower() == 'polynomial' or regressionType.lower() == 'poly':
 elif regressionType.lower() != 'linear':
     sys.exit("Invalid input")
 
+# Set initial weights
+weights = []
+for x in range(order + 1):
+    weights.append(random())  # Random float from 0 to 1
+weights = np.array(weights)
+
 # Basis expansion
-order += 1
-weights = [0] * order
-theta_0 = randint(0, 1)
-theta_1 = randint(0, 1)
 
 # Output given information
-print("Data:")
-print(data)
 featureCount = len(data[0])-1
-print("Features:")
-print(featureCount)
-print("New feature values:")
-print(newFeatureValues)
+print("Features: " + str(featureCount))
+print("Order: " + str(order))
 
-# Stochastic gradient descent
-for x in data:
-    h = regression.weight_update(data, alpha)
-    predictions.append()
-
+# Regression
 epoch = 1
 while epoch <= epochMax:
     meanSquaredError = []
+    example = 0
     for m in data:
-        inputs = data[m]
-        inputs.insert(0, 1)
-        hypothesis = regression.get_h_theta(weights, inputs)
-        gradient = rawError * inputs
-        mse =
+        entry = np.array(data[example])
+        featuresOnly = entry[:-1].copy()
+        inputs = np.insert(featuresOnly, 0, 1.0)  # x_0 = 1, always
+        print(entry)
+        print(featuresOnly)
+        print(inputs)
+        print(weights)
+        hypothesis = np.dot(np.transpose(weights), inputs)  # Scalar
+        groundTruth = data[example][featureCount]
+        rawError = hypothesis - groundTruth  # Scalar
+        gradient = rawError * inputs  # 1 x n
+        # Weight updates
+        weightsTemp = weights
+        feature = 0
+        for n in weights:
+            weights[feature] = weightsTemp[feature] - alpha * gradient
+            feature += 1
+        # Find squared error for data entry
+        mse = np.dot(np.transpose(weights), inputs)
+        mse = mse - groundTruth
         meanSquaredError.append(mse)
-    averageSquaredError = sum(meanSquaredError) / m
-    print("MSE after " + epoch + " iterations: " + averageSquaredError)
+        example += 1
+    # Find average squared error over all data
+    averageSquaredError = sum(meanSquaredError) / len(meanSquaredError)
+    print("MSE after " + str(epoch) + " iterations: " + str(averageSquaredError))
     epoch += 1
 
 # Plot data
 if not linear:  # Only works for polynomial regression
-    x = [i[0] for i in data]  # First column
-    y = [i[featureCount] for i in data]  # Prediction column
+    x1 = [i[0] for i in data]  # First column
+    y1 = [i[featureCount] for i in data]  # Ground truth column
+    x2 = x1
+    y2 = []  # Prediction
+    example = 0
+    for m in data:
+        entry = np.array(data[example])
+        inputs = np.insert(entry, 0, 1)  # x_0 = 1, always
+        y2.append(np.dot(np.transpose(weights), inputs))  # Scalar
+        example += 1
     plt.title("Linear Regression")
     plt.xlabel("X-axis")
     plt.ylabel("Y-axis")
-    plt.scatter(x, y, color="green")
+    plt.scatter(x1, y1, color="blue")  # Actual data
+    plt.plot(x2, y2, color="red")  # Model prediction
     plt.show()
 
 
