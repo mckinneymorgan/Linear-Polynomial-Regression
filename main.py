@@ -49,19 +49,22 @@ while epoch <= epochMax:
         entry = np.array(data[example])
         featuresOnly = entry[:-1].copy()
         inputs = np.insert(featuresOnly, 0, 1.0)  # x_0 = 1, always
-        print(entry)
-        print(featuresOnly)
-        print(inputs)
-        print(weights)
         hypothesis = np.dot(np.transpose(weights), inputs)  # Scalar
         groundTruth = data[example][featureCount]
         rawError = hypothesis - groundTruth  # Scalar
         gradient = rawError * inputs  # 1 x n
+        # print("Inputs: " + str(inputs))
+        # print("Weights: " + str(weights))
+        # print("Hypothesis: " + str(hypothesis))
+        # print("Ground truth: " + str(groundTruth))
+        # print("Raw error: " + str(rawError))
+        # print("Gradient: " + str(gradient))
         # Weight updates
-        weightsTemp = weights
+        weightsTemp = weights.copy()
         feature = 0
         for n in weights:
-            weights[feature] = weightsTemp[feature] - alpha * gradient
+            print(weights[feature])
+            weights[feature] = weightsTemp[feature] - alpha * gradient[feature]
             feature += 1
         # Find squared error for data entry
         mse = np.dot(np.transpose(weights), inputs)
@@ -82,7 +85,8 @@ if not linear:  # Only works for polynomial regression
     example = 0
     for m in data:
         entry = np.array(data[example])
-        inputs = np.insert(entry, 0, 1)  # x_0 = 1, always
+        featuresOnly = entry[:-1].copy()
+        inputs = np.insert(featuresOnly, 0, 1.0)  # x_0 = 1, always
         y2.append(np.dot(np.transpose(weights), inputs))  # Scalar
         example += 1
     plt.title("Linear Regression")
