@@ -27,31 +27,45 @@ if regressionType.lower() == 'polynomial' or regressionType.lower() == 'poly':
 elif regressionType.lower() != 'linear':
     sys.exit("Invalid input")
 
+# Basis expansion
+dataNew = data.copy()
+if not linear:
+    example = 0
+    for m in data:
+        index = 0
+        for x in range(order):
+            index += 1
+            cast = dataNew[example][index-1]
+            print(cast)
+            cast = float(cast) ** (index + 1)
+            dataNew[example] = np.insert(dataNew[example], index, cast)
+        example += 1
+
+# Output given information
+featureCountOriginal = len(data[0])-1
+featureCount = len(dataNew[0])-1
+print("Original features: " + str(featureCountOriginal))
+print("Features: " + str(featureCount))
+print("Order: " + str(order))
+print(dataNew)
+
 # Set initial weights
 weights = []
 for x in range(order + 1):
     weights.append(random())  # Random float from 0 to 1
 weights = np.array(weights)
 
-# Basis expansion
-
-# Output given information
-featureCount = len(data[0])-1
-print("Features: " + str(featureCount))
-print("Order: " + str(order))
-print(data)
-
 # Regression
 epoch = 1
 while epoch <= epochMax:
     meanSquaredError = []
     example = 0
-    for m in data:
-        entry = np.array(data[example])
+    for m in dataNew:
+        entry = np.array(dataNew[example])
         featuresOnly = entry[:-1].copy()
         inputs = np.insert(featuresOnly, 0, 1.0)  # x_0 = 1, always
         hypothesis = np.dot(np.transpose(weights), inputs)  # Scalar
-        groundTruth = data[example][featureCount]
+        groundTruth = dataNew[example][featureCount]
         rawError = hypothesis - groundTruth  # Scalar
         gradient = rawError * inputs  # 1 x n
         # print("Inputs: " + str(inputs))
@@ -80,12 +94,12 @@ while epoch <= epochMax:
 # Plot data
 if not linear:  # Only works for polynomial regression
     x1 = [i[0] for i in data]  # First column
-    y1 = [i[featureCount] for i in data]  # Ground truth column
+    y1 = [i[featureCountOriginal] for i in data]  # Ground truth column
     x2 = x1
     y2 = []  # Prediction
     example = 0
-    for m in data:
-        entry = np.array(data[example])
+    for m in dataNew:
+        entry = np.array(dataNew[example])
         featuresOnly = entry[:-1].copy()
         inputs = np.insert(featuresOnly, 0, 1.0)  # x_0 = 1, always
         y2.append(np.dot(np.transpose(weights), inputs))  # Scalar
