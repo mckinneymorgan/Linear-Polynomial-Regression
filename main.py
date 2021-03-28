@@ -13,8 +13,8 @@ linear = True
 order = 11  # Number of features in synthetic dataset, default
 
 # Parameters, tune as needed
-alpha = 0.0001  # 0.001 sufficient for synthetic 1
-epochMax = 1000  # 100 sufficient for synthetic 1
+alpha = 0.001  # 0.001 sufficient for synthetic 1
+epochMax = 100  # 100 sufficient for synthetic 1
 
 # User input, read and store input csv file
 print("LINEAR AND POLYNOMIAL REGRESSION \n")
@@ -108,6 +108,8 @@ while epoch <= epochMax:
     if epoch % 10 == 0:
         print("MSE after " + str(epoch) + " iterations: " + str(averageSquaredError))
     epoch += 1
+print("Final weights:")
+print(weights)
 
 # Plot data
 if not linear:  # Only works for polynomial regression
@@ -122,11 +124,12 @@ if not linear:  # Only works for polynomial regression
         inputs = np.insert(featuresOnly, 0, 1.0)  # x_0 = 1, always
         y2.append(np.dot(np.transpose(weights), inputs))  # Scalar
         example += 1
-    plt.title("Linear Regression")
-    plt.xlabel("X-axis")
-    plt.ylabel("Y-axis")
-    plt.scatter(x1, y1, color="blue")  # Actual data
-    plt.scatter(x2, y2, color="red")  # Model prediction
+    plt.title("Polynomial Regression (Order " + str(order) + ")")
+    plt.xlabel("Inputs")
+    plt.ylabel("Outputs")
+    plt.scatter(x1, y1, color="blue", label="Original Data")
+    plt.scatter(x2, y2, color="red", label="Model Prediction")
+    plt.legend(loc="best")
     plt.show()
 
 
