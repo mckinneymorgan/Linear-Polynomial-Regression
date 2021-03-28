@@ -12,9 +12,9 @@ data = []
 linear = True
 order = 11  # Number of features in synthetic dataset, default
 
-# Parameters, tune as needed
-alpha = 0.001  # 0.001 sufficient for synthetic 1
-epochMax = 100  # 100 sufficient for synthetic 1
+# Hyperparameters, tune as needed
+alpha = 0.001
+epochMax = 100
 
 # User input, read and store input csv file
 print("LINEAR AND POLYNOMIAL REGRESSION \n")
@@ -81,30 +81,24 @@ while epoch <= epochMax:
         entry = np.array(dataNew[example])
         featuresOnly = entry[:-1].copy()
         inputs = np.insert(featuresOnly, 0, 1.0)  # x_0 = 1, always
-        # print("Inputs: " + str(inputs))
-        # print("Weights: " + str(weights))
         hypothesis = np.dot(np.transpose(weights), inputs)  # Scalar
-        # print("Hypothesis: " + str(hypothesis))
         groundTruth = dataNew[example][featureCount]
         rawError = hypothesis - groundTruth  # Scalar
         gradient = rawError * inputs  # 1 x n
-        # print("Ground truth: " + str(groundTruth))
-        # print("Raw error: " + str(rawError))
-        # print("Gradient: " + str(gradient))
         # Weight updates
         weightsTemp = weights.copy()
         feature = 0
         for n in weights:
-            # print(weights[feature])
             weights[feature] = weightsTemp[feature] - alpha * gradient[feature]
             feature += 1
         # Find squared error for data entry
         mse = np.dot(np.transpose(weights), inputs)
         mse = mse - groundTruth
+        mse = abs(mse)
         meanSquaredError.append(mse)
         example += 1
     # Find average squared error over all data
-    averageSquaredError = abs(sum(meanSquaredError)) / len(meanSquaredError)
+    averageSquaredError = sum(meanSquaredError) / len(meanSquaredError)
     if epoch % 10 == 0:
         print("MSE after " + str(epoch) + " iterations: " + str(averageSquaredError))
     epoch += 1
