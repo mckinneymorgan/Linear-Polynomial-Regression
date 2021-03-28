@@ -13,9 +13,9 @@ def read_file(names, data):
 
     # User input, get filename(s)
     file = input("Enter csv file name: ")
-    class_value_file = input("Are the class labels in another file (Y/N): ")
+    class_value_file = input("Are the class values in another file (Y/N): ")
     if class_value_file.lower() == 'y':
-        class_value_file = input("Enter class label file name: ")
+        class_value_file = input("Enter class value file name: ")
         class_value_file_exist = True
     elif class_value_file.lower() != 'n':
         sys.exit("Invalid input")
