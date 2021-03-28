@@ -1,7 +1,6 @@
 # Original author: Morgan McKinney 3/2021
 
 import read
-import regression
 import sys
 from random import random
 import numpy as np
@@ -54,6 +53,18 @@ featureCount = len(dataNew[0])-1
 print("Original features: " + str(featureCountOriginal))
 print("Features: " + str(featureCount))
 print("Order: " + str(order))
+
+# Normalize data
+if linear:
+    entry = 0
+    maxList = list(map(max, data))
+    minList = list(map(min, data))
+    for m in data:
+        feature = 0
+        for n in range(featureCount):
+            data[entry] = (data[entry] - minList[feature]) / (maxList[feature] - minList[feature])
+            feature += 1
+        entry += 1
 
 # Set initial weights
 weights = []
