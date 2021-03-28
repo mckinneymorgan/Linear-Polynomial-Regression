@@ -59,10 +59,10 @@ if linear:
     entry = 0
     maxList = list(map(max, data))
     minList = list(map(min, data))
-    for m in data:
+    for m in dataNew:
         feature = 0
         for n in range(featureCount):
-            data[entry] = (data[entry] - minList[feature]) / (maxList[feature] - minList[feature])
+            dataNew[entry] = (dataNew[entry] - minList[feature]) / (maxList[feature] - minList[feature])
             feature += 1
         entry += 1
 
