@@ -10,10 +10,12 @@ import matplotlib.pyplot as plt
 # Initialize variables
 names = []
 data = []
-alpha = 0.001
-epochMax = 100
 linear = True
 order = 11  # Number of features in synthetic dataset, default
+
+# Parameters, tune as needed
+alpha = 0.0001  # 0.001 sufficient for synthetic 1
+epochMax = 1000  # 100 sufficient for synthetic 1
 
 # User input, read and store input csv file
 print("LINEAR AND POLYNOMIAL REGRESSION \n")
@@ -32,17 +34,19 @@ dataNew = data.copy()
 if not linear:
     example = 0
     newIndex = 0
-    for x in range(order):  # Expand array to allow for more indexes
+    for x in range(order - 1):  # Expand array to allow for more indexes
         newIndex += 1
         dataNew = np.insert(dataNew, newIndex, 0, axis=1)
     for m in data:
         index = 0
         original = dataNew[example][index]
-        for x in range(order):  # Assign casted values in new index
+        for x in range(order - 1):  # Assign casted values in new index
             index += 1
             cast = float(original) ** (index + 1)
             dataNew[example][index] = cast
         example += 1
+data = data.astype(float)
+dataNew = dataNew.astype(float)
 
 # Output given information
 featureCountOriginal = len(data[0])-1
@@ -50,7 +54,6 @@ featureCount = len(dataNew[0])-1
 print("Original features: " + str(featureCountOriginal))
 print("Features: " + str(featureCount))
 print("Order: " + str(order))
-print(dataNew)
 
 # Set initial weights
 weights = []
@@ -67,14 +70,13 @@ while epoch <= epochMax:
         entry = np.array(dataNew[example])
         featuresOnly = entry[:-1].copy()
         inputs = np.insert(featuresOnly, 0, 1.0)  # x_0 = 1, always
+        # print("Inputs: " + str(inputs))
+        # print("Weights: " + str(weights))
         hypothesis = np.dot(np.transpose(weights), inputs)  # Scalar
+        # print("Hypothesis: " + str(hypothesis))
         groundTruth = dataNew[example][featureCount]
         rawError = hypothesis - groundTruth  # Scalar
         gradient = rawError * inputs  # 1 x n
-        # Output variables
-        # print("Inputs: " + str(inputs))
-        # print("Weights: " + str(weights))
-        # print("Hypothesis: " + str(hypothesis))
         # print("Ground truth: " + str(groundTruth))
         # print("Raw error: " + str(rawError))
         # print("Gradient: " + str(gradient))
@@ -82,7 +84,7 @@ while epoch <= epochMax:
         weightsTemp = weights.copy()
         feature = 0
         for n in weights:
-            print(weights[feature])
+            # print(weights[feature])
             weights[feature] = weightsTemp[feature] - alpha * gradient[feature]
             feature += 1
         # Find squared error for data entry
@@ -91,8 +93,9 @@ while epoch <= epochMax:
         meanSquaredError.append(mse)
         example += 1
     # Find average squared error over all data
-    averageSquaredError = sum(meanSquaredError) / len(meanSquaredError)
-    print("MSE after " + str(epoch) + " iterations: " + str(averageSquaredError))
+    averageSquaredError = abs(sum(meanSquaredError)) / len(meanSquaredError)
+    if epoch % 10 == 0:
+        print("MSE after " + str(epoch) + " iterations: " + str(averageSquaredError))
     epoch += 1
 
 # Plot data
@@ -112,7 +115,7 @@ if not linear:  # Only works for polynomial regression
     plt.xlabel("X-axis")
     plt.ylabel("Y-axis")
     plt.scatter(x1, y1, color="blue")  # Actual data
-    plt.plot(x2, y2, color="red")  # Model prediction
+    plt.scatter(x2, y2, color="red")  # Model prediction
     plt.show()
 
 
